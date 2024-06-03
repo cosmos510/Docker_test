@@ -31,5 +31,6 @@ jobs:
       id: convert_to_lowercase
       run: echo "::set-output name=docker_test::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
 
-    - name: Build and push Docker image
-      run: docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }} .
+    - name: Push Docker image
+      run: |
+            tags: ghcr.io/${{ github.actor }}/${{ steps.convert_to_lowercase.outputs.docker_test }}

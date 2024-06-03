@@ -3,42 +3,33 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - '**'  # Déclenche sur tout push sur n'importe quelle branche
+      - main
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
-    steps:
-    # Convert repository name to lowercase
-    - name: Convert repository name to lowercase
-      id: convert_to_lowercase
-      run: |
-        repo_name_lowercase=$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
-        echo "::set-output name=repo_name::${repo_name_lowercase}"
+    env:
+      # Define your environment variables here
+      docker_namespace: cosmos510
 
-    # Checkout the repository
+    steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Set up Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    # Log in to the GitHub Container Registry
-    - name: Log in to GitHub Container Registry
+    - name: Login to GitHub Container Registry
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.CR_PAT }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-    # Build the Docker image
-    - name: Build Docker image
-      run: |
-        docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }} .
+    - name: Convert repository name to lowercase
+      id: convert_to_lowercase
+      run: echo "::set-output name=docker_test::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
 
-    # Push the Docker image to the GitHub Container Registry
-    - name: Push Docker image
-      run: |
-        docker push ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}
+    - name: Build and push Docker image
+      run: docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }} .

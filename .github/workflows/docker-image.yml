@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/cosmos510/Docker_test:latest
+          tags: ghcr.io/cosmos510/docker_test:latest

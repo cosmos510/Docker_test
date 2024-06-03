@@ -31,14 +31,14 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.cosmos510 }}
-        password: ${{ env.secrets.CR_PAT }}
+        password: ${{ secrets.CR_PAT }}
 
     # Build the Docker image
     - name: Build Docker image
       run: |
-        docker build -t ghcr.io/${{ env.GITHUB_USERNAME_LOWERCASE }}/${{ steps.convert_to_lowercase.outputs.repo_name }}:latest .
+        docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}:latest .
 
     # Push the Docker image to the GitHub Container Registry
     - name: Push Docker image
       run: |
-        docker push ghcr.io/${{ env.GITHUB_USERNAME_LOWERCASE }}/${{ steps.convert_to_lowercase.outputs.repo_name }}:latest
+        docker push ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}:latest

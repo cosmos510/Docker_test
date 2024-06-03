@@ -36,9 +36,9 @@ jobs:
     # Build the Docker image
     - name: Build Docker image
       run: |
-        docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}:latest .
+        docker build -t ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }} .
 
     # Push the Docker image to the GitHub Container Registry
     - name: Push Docker image
       run: |
-        docker push ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}:latest
+        docker push ghcr.io/${{ env.cosmos510 }}/${{ steps.convert_to_lowercase.outputs.docker_test }}

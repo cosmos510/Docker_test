@@ -30,7 +30,7 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ github.cosmos510 }}
+        username: ${{ github.actor }}
         password: ${{ secrets.CR_PAT }}
 
     # Build the Docker image

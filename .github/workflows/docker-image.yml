@@ -1,36 +1,14 @@
-name: Build and Push Docker Image
-
-on:
-  push:
-    branches:
-      - main
-
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
 jobs:
-  build:
+  check-bats-version:
     runs-on: ubuntu-latest
-
-    env:
-      # Define your environment variables here
-      docker_namespace: cosmos510
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install -g bats
+      - run: bats -v
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Convert repository name to lowercase
-      id: convert_to_lowercase
-      run: echo "::set-output name=docker_test::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
-
-    - name: Push Docker image
-      run: |
-            tags: ghcr.io/${{ github.actor }}/${{ steps.convert_to_lowercase.outputs.docker_test }}
